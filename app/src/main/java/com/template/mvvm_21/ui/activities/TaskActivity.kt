@@ -4,11 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.template.mvvm_21.R
+import com.template.mvvm_21.databinding.ActivityTaskBinding
 import com.template.mvvm_21.model.Task
 import com.template.mvvm_21.ui.viewModel.ViewModel
-import com.template.mvvm_21.databinding.ActivityTaskBinding
 
-@Suppress("DEPRECATION")
 class TaskActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTaskBinding
     private lateinit var viewModel: ViewModel
@@ -20,13 +19,13 @@ class TaskActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
         task = intent.getSerializableExtra(MainActivity.UPDATE_TASK_KEY) as Task?
         if (task == null) {
-            createTaskView()
+            createTask()
         } else {
-            editTaskView()
+            initView()
         }
     }
 
-    private fun createTaskView() {
+    private fun createTask() {
         binding.buttonSave.setOnClickListener {
             val data = Task(
                 title = binding.etTitle.text.toString(),
@@ -37,7 +36,7 @@ class TaskActivity : AppCompatActivity() {
         }
     }
 
-    private fun editTaskView() {
+    private fun initView() {
         with(binding) {
             etTitle.setText(task?.title)
             etDescription.setText(task?.description)

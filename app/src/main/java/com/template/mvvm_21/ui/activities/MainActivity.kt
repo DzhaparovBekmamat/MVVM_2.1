@@ -1,5 +1,6 @@
 package com.template.mvvm_21.ui.activities
 
+import android.R
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +10,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import com.template.mvvm_21.databinding.ActivityMainBinding
 import com.template.mvvm_21.model.Task
 import com.template.mvvm_21.ui.adapter.TaskAdapter
 import com.template.mvvm_21.ui.viewModel.ViewModel
-import com.template.mvvm_21.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         viewModel.list.observe(this) { updatedList ->
+            binding.recyclerView.adapter = adapter
             adapter.setTask(updatedList)
         }
     }
@@ -78,13 +80,16 @@ class MainActivity : AppCompatActivity() {
             getString(com.template.mvvm_21.R.string.false_task),
             getString(com.template.mvvm_21.R.string.true_task)
         )
-        val adapterSpinner =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, taskFilterList)
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        val adapterSpinner = ArrayAdapter(this, R.layout.simple_spinner_item, taskFilterList)
+        adapterSpinner.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         binding.spinner.adapter = adapterSpinner
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
             ) {
                 when (taskFilterList[position]) {
                     getString(com.template.mvvm_21.R.string.all_task) -> viewModel.getTask()
